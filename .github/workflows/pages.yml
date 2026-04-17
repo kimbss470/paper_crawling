@@ -37,6 +37,7 @@ jobs:
 
       - name: Crawl paper metadata
         env:
+          # Optional. Leave unset for public-only OpenReview crawling.
           OPENREVIEW_USERNAME: ${{ secrets.OPENREVIEW_USERNAME }}
           OPENREVIEW_PASSWORD: ${{ secrets.OPENREVIEW_PASSWORD }}
         run: |

@@ -81,8 +81,8 @@ This produces:
 - `--sources`: Any of `arxiv`, `neurips`, `icml`, `iclr`, `openreview`.
 - `--arxiv-query`: Raw arXiv API query string.
 - `--max-arxiv-results`: Max arXiv records to fetch.
-- `--openreview-username`: Optional username for authenticated OpenReview access.
-- `--openreview-password`: Optional password for authenticated OpenReview access.
+- `--openreview-username`: Optional. Not required for public OpenReview papers.
+- `--openreview-password`: Optional. Not required for public OpenReview papers.
 - `--output`: Output file path ending in `.jsonl` or `.csv`.
 - `--include-non-llm`: Keep everything instead of applying the LLM keyword filter.
 
@@ -119,6 +119,7 @@ Each paper is normalized into fields like:
 - `NeurIPS` is scraped from the official proceedings pages.
 - `ICML` is scraped from the official `Proceedings of Machine Learning Research` site.
 - `ICLR` is collected from `OpenReview`, which is also used as the fallback source for accepted-but-not-yet-published papers.
+- `OpenReview` access defaults to public-only crawling. No OpenReview login is required for open papers.
 
 Official sources change their HTML over time, so the conference scrapers are intentionally isolated by source and easy to patch.
 
@@ -139,7 +140,8 @@ One-time GitHub setup:
 
 1. Push the repository to GitHub.
 2. In repository settings, set `Pages` source to `GitHub Actions`.
-3. Add `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD` as repository secrets if you want authenticated OpenReview access.
+3. No OpenReview secrets are required for public papers.
+4. Only add `OPENREVIEW_USERNAME` and `OPENREVIEW_PASSWORD` if you later decide to crawl non-public OpenReview content.
 
 I do not need `gh login` to finish local code changes. I only need GitHub access if you want me to push the repo, create the repository, or inspect Actions runs for you.
 
