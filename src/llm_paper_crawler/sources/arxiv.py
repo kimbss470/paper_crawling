@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 import xml.etree.ElementTree as ET
 from urllib.parse import urlencode
 
@@ -28,8 +29,9 @@ class ArxivCrawler(BaseCrawler):
             "sortBy": "submittedDate",
             "sortOrder": "descending",
         }
-        response = self.session.get(f"{ARXIV_API_URL}?{urlencode(params)}", timeout=60)
-        response.raise_for_status()
+        response = self._request_with_backoff(params)
+        if response is None:
+            return []
 
         root = ET.fromstring(response.text)
         papers: list[Paper] = []
@@ -58,6 +60,21 @@ class ArxivCrawler(BaseCrawler):
                 )
             )
         return papers
+
+    def _request_with_backoff(self, params: dict[str, str | int]) -> requests.Response | None:
+        url = f"{ARXIV_API_URL}?{urlencode(params)}"
+        delay_seconds = 3
+        for attempt in range(3):
+            response = self.session.get(url, timeout=60)
+            if response.status_code != 429:
+                response.raise_for_status()
+                return response
+
+            if attempt < 2:
+                time.sleep(delay_seconds)
+                delay_seconds *= 2
+
+        return None
 
 
 def _find_pdf_url(entry: ET.Element) -> str:

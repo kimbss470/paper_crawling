@@ -44,7 +44,7 @@ jobs:
           python -m llm_paper_crawler.cli crawl \
             --years 2024 2025 2026 \
             --sources arxiv neurips icml iclr openreview \
-            --max-arxiv-results 500 \
+            --max-arxiv-results 150 \
             --output build/papers.jsonl
 
       - name: Build static site
