@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 from ..models import Paper
 from .base import BaseCrawler
-from .openreview import ICLRCrawler
+from .openreview import ICLRCrawler as OpenReviewICLRCrawler
 
 
 USER_AGENT = "llm-paper-crawling/0.1 (+https://example.local)"
@@ -70,7 +70,7 @@ class ICMLCrawler(BaseCrawler):
 
 class ICLRCrawlerProxy(BaseCrawler):
     def __init__(self, username: str = "", password: str = "") -> None:
-        self.delegate = ICLRCrawler(username=username, password=password)
+        self.delegate = OpenReviewICLRCrawler(username=username, password=password)
 
     def fetch_many(self, years: list[int]) -> list[Paper]:
         return self.delegate.fetch_many(years)
