@@ -41,9 +41,11 @@ jobs:
           OPENREVIEW_USERNAME: ${{ secrets.OPENREVIEW_USERNAME }}
           OPENREVIEW_PASSWORD: ${{ secrets.OPENREVIEW_PASSWORD }}
         run: |
+          # Use the stable public-source subset for deployment. OpenReview-backed
+          # crawling can be re-enabled after adding stronger request timeouts.
           python -m llm_paper_crawler.cli crawl \
             --years 2024 2025 2026 \
-            --sources arxiv neurips icml iclr openreview \
+            --sources arxiv neurips icml \
             --max-arxiv-results 150 \
             --output build/papers.jsonl
 
